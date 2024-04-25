@@ -1,42 +1,12 @@
-# Base Image
-FROM python:3.9
+FROM python:3.8
 
-# create and set working directory
-RUN mkdir /app
+# Устанавливаем зависимости
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Add current directory code to working directory
-ADD . /app/
+# Копируем код проекта в контейнер
+COPY . .
 
-# set default environment variables
-ENV PYTHONUNBUFFERED 1
-ENV LANG C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive 
-
-# set project environment variables
-# grab these via Python's os.environ
-# these are 100% optional here
-ENV PORT=8000
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        tzdata \
-        python3-setuptools \
-        python3-pip \
-        python3-dev \
-        python3-venv \
-        git \
-        && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-
-# install environment dependencies
-RUN pip3 install --upgrade pip 
-
-# Install project dependencies
-RUN pip3 install -r requirements.txt
-
-EXPOSE 8000
-# CMD gunicorn adserver.wsgi:application --bind 0.0.0.0:$PORT
-CMD daphne -b 0.0.0.0 -p 8000 adserver.asgi:application
+# Запускаем приложение
+CMD ["python", "managers.py"]
