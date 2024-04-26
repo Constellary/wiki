@@ -5,9 +5,7 @@ services:
     build: .
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_NAME: wiki
-      DB_USER: postgres
+    volumes:
+      - .:/code
+  redis:
+    image: redis
