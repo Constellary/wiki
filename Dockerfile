@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 # Определение команды запуска приложения
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "managers.py", "runserver", "0.0.0.0:8000"]
